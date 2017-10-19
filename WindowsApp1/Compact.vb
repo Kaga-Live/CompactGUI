@@ -4,6 +4,12 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Ookii.Dialogs                                                                          'Uses Ookii Dialogs for the non-archaic filebrowser dialog. http://www.ookii.org/Software/Dialogs
 Imports System.Management
+Imports System.Resources
+Imports System.Globalization
+Imports System.Threading
+Imports CompactGUI.My.Resources
+
+
 
 Public Class Compact
     Dim version = "1.4.0_rc1"
@@ -357,6 +363,7 @@ Public Class Compact
             MyProcess.EnableRaisingEvents = True
             MyProcess.BeginErrorReadLine()
             MyProcess.BeginOutputReadLine()
+
 
 
             Try
@@ -819,5 +826,31 @@ Public Class Compact
         'MsgBox(compactArgs)
     End Sub
 
+    Dim culture As CultureInfo
+
+
+    Private Sub Button2_Clicka(sender As Object, e As EventArgs)
+        culture = CultureInfo.CurrentCulture
+        MsgBox(culture.TwoLetterISOLanguageName)
+        Dim rm As New ResourceManager("CompactGUI.Localization.Res", GetType(Compact).Assembly)
+
+        If CheckBox2.Checked = True Then
+            culture = CultureInfo.CreateSpecificCulture("fr")
+            MsgBox(rm.GetString("hello", culture))
+        Else
+
+            MsgBox(rm.GetString("hello", culture))
+        End If
+    End Sub
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+
+        If CheckBox2.Checked = True Then
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("fr-FR")
+            Console.WriteLine(MyRes.Hello)
+        Else
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US")
+            Console.WriteLine(MyRes.Hello)
+        End If
+    End Sub
 
 End Class
